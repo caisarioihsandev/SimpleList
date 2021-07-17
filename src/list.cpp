@@ -3,19 +3,25 @@
 void List::printMenu() {
     int choice;
 
-    std::cout << "*********************\n" << std::endl;
+    std::cout << "*********************" << std::endl;
     std::cout << "1 - Print list.\n";
     std::cout << "2 - Add to list.\n";
     std::cout << "3 - Delete from list.\n";
-    std::cout << "4 - Quit.\n";
+    std::cout << "4 - Save list.\n";
+    std::cout << "5 - Quit.\n";
     std::cout << "Enter your choice and press return: ";
 
     std::cin >> choice;
 
-    if (choice == 4)
+    if (choice == 5)
     {
-        exit(0);
+        return;
     }
+    else if (choice == 4)
+    {
+        saveList();
+    }
+    
     else if (choice == 3)
     {
         deleteItem();
@@ -52,13 +58,15 @@ void List::addItem() {
 
 void List::deleteItem() {
     std::cout << "*** Delete Item ***" << std::endl;
-    std::cout << "Select an item index number to delete: ";
+    
     if (list.size())
     {
         for (size_t i = 0; i < list.size(); i++)
         {
             std::cout << i << ": " << list[i] << std::endl;
         }
+
+        std::cout << "\nSelect an item index number to delete: ";
 
         int choiceNum;
         std::cin >>choiceNum;
@@ -95,4 +103,38 @@ void List::printList() {
         std::cout << "Invalid Coice. Quitting...!" << std::endl;
     }
     
+}
+
+bool List::findUserList() {
+    bool userFound = false;
+    std::cout << "\n\n\n\n\n\n";
+    std::cout << "*** Welcome " << name << " ***" << std::endl;
+
+    for (size_t userIndex = 0; userIndex < mainList.size(); userIndex++)
+    {
+        std::cout << mainList[userIndex][0] << std::endl;
+        if (mainList[userIndex][0] == name)
+        {
+            std::cout << "User has been found: " << mainList[userIndex][0] << std::endl;
+            list = mainList[userIndex];
+            currentUserIndex = userIndex;
+            userFound = true;
+            break;
+        }
+    }
+
+    if (userFound == false)
+    {
+        list.push_back(name);
+        mainList.push_back(list);
+        currentUserIndex = (int)mainList.size()-1;
+    }
+
+    return userFound;    
+}
+
+void List::saveList() {
+    std::cout << "Saving the list..." << std::endl;
+    mainList[currentUserIndex] = list;
+    printMenu();
 }
